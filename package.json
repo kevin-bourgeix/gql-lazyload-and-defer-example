@@ -1,0 +1,22 @@
+{
+  "name": "test-gql-yoda",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node src/index.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "typescript": "^5.3.2",
+    "ts-node": "^10.9.1"
+  },
+  "dependencies": {
+    "@graphql-yoga/plugin-defer-stream": "^3.0.0",
+    "graphql": "^16.8.1",
+    "graphql-yoga": "^5.0.0"
+  }
+}
