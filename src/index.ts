@@ -1,4 +1,4 @@
-import { createSchema } from 'graphql-yoga'
+import { Repeater, createSchema } from 'graphql-yoga'
 import { createServer } from 'node:http'
 import { createYoga } from 'graphql-yoga'
 import { useDeferStream } from '@graphql-yoga/plugin-defer-stream'
@@ -11,9 +11,13 @@ export const schema = createSchema({
       world: String
       defered: String
     }
+    type Collection {
+      items: [String]
+    }
     type Query {
       hello: Hello
       helloFilled: Hello
+      collection: Collection
     }
   `,
   resolvers: {
@@ -40,16 +44,25 @@ export const schema = createSchema({
           return 'defered!!'
       }
     },
+    Collection: {
+      // https://the-guild.dev/graphql/yoga-server/docs/features/defer-stream#writing-safe-stream-resolvers
+      items: () => new Repeater<string>(async (push, stop) => {
+        for (let i = 0; i < 10; i++) {
+          await wait(500)
+          push(`Item ${i}`)
+        }
+        stop()
+      })
+    },
     Query: {
-      hello: () => {
-        return () => {}
-      },
-      helloFilled: (obj, args, ctx, info) => {
+      hello: () => ({}),
+      helloFilled: () => {
         return {
-            world: () => 'oui!',
-            defered: () => 'not defered!',
+            world: () => 'filled!',
+            defered: () => 'filled!',
         };
       },
+      collection: () => ({}),
     },
   },
 })
